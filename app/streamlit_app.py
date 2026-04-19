@@ -24,10 +24,19 @@ from src.utils import generate_insights, generate_recommendations
 
 st.set_page_config(
     page_title="UAC Care Transition Analytics",
-    page_icon="📊",
-    layout="wide",
-    initial_sidebar_state="expanded",
+    page_icon="📊", 
+    layout="wide"
 )
+
+# Hide Streamlit's default header and footer for a cleaner look
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 st.markdown("""
 <style>
@@ -151,7 +160,7 @@ for col in ['HHS_In_Care', 'HHS_Discharges', 'CBP_Apprehensions']:
         # Interpolate bridges the gaps between dots, making the graph a smooth, continuous line!
         df_filtered[col] = df_filtered[col].interpolate(method='linear').ffill().bfill()
 
-# Run standard KPIs
+#  KPI CALCULATION (This is where we compute all the key metrics that will feed into the dashboard and bottleneck detection logic)
 df_kpi = compute_kpis(df_filtered)
 
 # 5. MATH RESCUE FOR DISCHARGE EFFECTIVENESS ) 
@@ -166,10 +175,32 @@ if 'HHS_In_Care' in df_kpi.columns and 'HHS_Discharges' in df_kpi.columns:
         np.nan 
     )
 
-df_full = detect_bottlenecks(df_kpi, sustained_days=sustained_n)
+# 6. BOTTLENECK DETECTION (This is where the magic happens - it flags periods of operational strain based on the defined thresholds and sustained durations)    
+try:
+    df_full = detect_bottlenecks(df_kpi, sustained_days=sustained_n)
+except Exception as e:
+    st.info("ℹ️ System couldn't calculate bottlenecks for this exact date range due to limited data points. Try widening the dates.")
+    
+    # Even if bottleneck detection fails, we want the rest of the dashboard to work, 
+    # so we create a df_full with all the necessary columns but without bottleneck flags. 
+    # This way users can still see KPIs and trends even if bottleneck analysis isn't possible for the selected date range.
+    df_full = df_kpi.copy()
+    
+    safe_columns = [
+        "CBP_Bottleneck", "HHS_Bottleneck", 
+        "CBP_Sustained", "HHS_Sustained", 
+        "Critical_Alert", "Severity_Score",
+        "Any_Bottleneck"  
+    ]
+    
+    # Add missing bottleneck columns with default values to prevent downstream errors in the dashboard, even if we can't calculate them for this date range
+    for col in safe_columns:
+        if col not in df_full.columns:
+            df_full[col] = 0
+# Now we have a df_full with all the necessary columns for the rest of the dashboard to function, even if bottleneck detection couldn't be performed due to limited data in the selected date range.    
 summary = kpi_summary(df_full)
 
-# 5. UI INSIGHTS GENERATION (Translates the raw numbers into plain-language insights for operational teams)
+# 7. UI INSIGHTS GENERATION (Translates the raw numbers into plain-language insights for operational teams)
 if 'Discharge_Effectiveness' in df_full.columns:
     # Only average the real numbers, ignore zeroes and NaNs
     eff_vals = df_full['Discharge_Effectiveness'].dropna()
