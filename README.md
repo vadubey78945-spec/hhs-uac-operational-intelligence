@@ -23,10 +23,11 @@ This dashboard provides executive-level visibility into system bottlenecks, tran
 - **Automated Insights Engine:** Generates plain-text operational insights and strategic recommendations based on live data trends.
 - **Executive Reporting:** One-click download of an Executive Summary Snapshot (.md) and sanitized raw processed data (.csv).
 
-## 📈 Core KPIs Monitored
-1. **Transfer Efficiency Ratio:** Tracks how effectively CBP transfers children out of temporary custody. *(Target: >= 80%)*
-2. **Discharge Effectiveness Index:** Measures the rate at which HHS successfully places children out of shelter care. *(Target: >= 10%)*
-3. **Pipeline Throughput:** The holistic ratio of HHS discharges relative to incoming CBP apprehensions. *(Target: >= 50%)*
+📈 **Core KPIs Monitored**
+
+1. **Transfer Efficiency Ratio:** Tracks how effectively CBP transfers children out of temporary custody. *(Evaluated against dynamic, user-defined thresholds)*
+2. **Discharge Effectiveness Index:** Measures the rate at which HHS successfully places children out of shelter care. *(Evaluated against dynamic, user-defined thresholds)*
+3. **Pipeline Throughput:** The holistic ratio of HHS discharges relative to incoming CBP apprehensions. *(Evaluated against dynamic, user-defined thresholds)*
 4. **Backlog Accumulation Rate:** Calculates the daily net-new bottleneck (Apprehensions minus Discharges).
 5. **Outcome Stability Score:** A 7-day rolling standard deviation of discharges to measure operational consistency.
 
