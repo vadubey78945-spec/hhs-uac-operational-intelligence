@@ -2,7 +2,7 @@
 **UAC Care Transition Efficiency & Placement Outcomes**
 
 **TO:** Government Stakeholders & Operations Directorate (HHS/CBP)  
-**FROM:** Data Analytics Intern (Vaibhav Dubey), Unified Mentor  
+**FROM:** Data Analyst Intern (Vaibhav Dubey), Unified Mentor  
 **SUBJECT:** Pipeline Flow Bottlenecks and Optimization Imperatives  
 
 **BLUF (Bottom Line Up Front):** The Unaccompanied Alien Children (UAC) transition pipeline is currently experiencing intake-to-discharge friction. While overall pipeline throughput remains mathematically high (250.3%) due to burst discharges, a low baseline daily discharge rate (2.38%) compared to the massive in-care population (~12,000) routinely triggers custody backlogs at the CBP level.
